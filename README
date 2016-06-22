@@ -1,0 +1,10 @@
+Hadoop Downloader
+
+Just a simple script to download Hadoop.  I have been unable to
+programmatically download and do the following:
+
+1. Uses the closer.cgi to find a mirror which spreads the load of downloading
+
+2. Parse the signatures and verifies the download
+
+This bash script does both.  It really should be easier than this :(
