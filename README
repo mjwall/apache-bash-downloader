@@ -3,8 +3,8 @@ Hadoop Downloader
 Just a simple script to download Hadoop.  I have been unable to
 programmatically download and do the following:
 
-1. Use the closer.cgi to find a mirror which spreads the load of downloading
+1. Use the closer.cgi to find a mirror so I wasn't pinging one server all the time
 
-2. Parse the signatures and verifies the download
+2. Parse the signatures and verify the download, because the md5 file contains multiple entries
 
-This bash script does both.  It really should be easier than this :(
+This bash script does both.  It really should be easier than this :(  Maybe there is a better way.
