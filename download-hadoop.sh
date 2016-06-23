@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# just a script to download verify a hadoop distribution
-# respects the apache mirrors and also verifies the checksum
+# script to download a hadoop distribution
+# that respects the apache mirrors and also verifies the checksum
 # 
 # Can change verison like
-# HADOOP_VERSION=2.6.1 ./download-hadoop
+# VERSION=2.6.1 ./download-hadoop
 
 # Note, the structure of the hadoop hadoop project changed early in 2.  Prior
 # to that, you would download from a different place like hadoop/core.  After
@@ -15,59 +15,29 @@
 # requested version, someplace like
 # http://archive.apache.org/dist/hadoop/common/hadoop-${hadoop.version}/hadoop-${hadoop.version}.tar.gz
 
-HADOOP_VERSION="${HADOOP_VERSION:-2.6.4}" 
-HADOOP_FILE=hadoop-${HADOOP_VERSION}.tar.gz
+HADOOP_VERSION="${VERSION:-2.6.4}" 
+HADOOP_FILE="hadoop-${HADOOP_VERSION}.tar.gz"
+HADOOP_SHA_FILE="${HADOOP_FILE}.mds"
+HADOOP_URL_FROM_BASE="hadoop/common/hadoop-${HADOOP_VERSION}"
 
-abort() {
-  echo $1
-  exit 1
-}
-
-download_hadoop() {
-  if [ -e ${HADOOP_FILE} ]; then
-    echo File ${HADOOP_FILE} already downloaded
-  else
-    # use the closer.cgi to pick a mirror
-    local CURLCMD="curl -s -L http://www.apache.org/dyn/closer.cgi/hadoop/common/hadoop-${HADOOP_VERSION}/${HADOOP_FILE}?as_json=1" 
-    local BASE=$(${CURLCMD} | grep preferred | awk '{print $NF}' | sed 's/\"//g')
-    local URL="${BASE}hadoop/common/hadoop-${HADOOP_VERSION}/${HADOOP_FILE}"
-    echo Downloading $URL
-    curl -L ${URL} -o ${HADOOP_FILE} || abort "Failed to download ${HADOOP_FILE}"
+get_hadoop_sha256_from_sig() {
+  local SHAFILE=$1
+  if [ ! -e "${SHAFILE}" ]; then
+    abort "get_hadoop_sha256_from_sig requires 1 argument that names an existing signature [file]"
   fi
-}
-
-check_sha() {
-    echo Checking sha256 of the file
-    local SHAFILE="hadoop-${HADOOP_VERSION}.tar.gz.mds"
-    if [ ! -e ${SHAFILE} ]; then
-      curl -s -L "https://dist.apache.org/repos/dist/release/hadoop/common/hadoop-${HADOOP_VERSION}/${SHAFILE}" -o "${SHAFILE}" || abort "Failed to down ${SHAFILE}"
-    fi
-    local FILESHA=$(shasum -a 256 ${HADOOP_FILE} | awk '{print $1}')
-    # remove all  newlines, add a newline before each hadoop-, find the SHA256
-    # line, remove up the signature, remove all spaces, then lowercase
-    local EXPECTEDSHA=$(cat ${SHAFILE} | tr -d '\n' | sed "s/hadoop-/\\`echo -e '\n\r'`/g" | grep SHA256 | sed 's/.* SHA256 = //' | tr -d ' ' | awk '{print tolower($0)}')
-    if [ "${EXPECTEDSHA}" == "${FILESHA}" ]; then
-      echo "File looks good"
-    else
-      abort "SHAs did not match. Expected ${EXPECTEDSHA} but was ${FILESHA}"
-    fi
-}
-
-ensure_executables() {
-  local EXES=""
-  which curl 2>&1 >/dev/null   || EXES="curl "
-  which awk 2>&1 >/dev/null    || EXES="${EXES}awk "
-  which shasum 2>&1 >/dev/null || EXES="${EXES}shasum "
-  if [ "${EXES}x" != "x" ]; then
-    abort "The following executables are required: ${EXES}"
-  fi
+  # The hadoop signature file has multiple signatures and each signature can be
+  # 1 or more lines.
+  echo $(cat ${SHAFILE} | tr -d '\n' | sed "s/hadoop-/\\`echo -e '\n\r'`/g" | grep SHA256 | sed 's/.* SHA256 = //')
 }
 
 run() {
-  echo "Looking for ${HADOOP_FILE}"
-  ensure_executables
-  download_hadoop
-  check_sha
+  log Downloading and checking "${HADOOP_FILE}"
+  download_file_from_mirror "${HADOOP_FILE}" "${HADOOP_URL_FROM_BASE}"
+  download_signature_file "${HADOOP_SHA_FILE}" "${HADOOP_URL_FROM_BASE}"
+  local EXPECTED=$(get_hadoop_sha256_from_sig "${HADOOP_SHA_FILE}")
+  local ACTUAL=$(get_sha256_from_file "${HADOOP_FILE}")
+  assert_signature "${EXPECTED}" "${ACTUAL}"
 }
 
+source ./common.sh
 run

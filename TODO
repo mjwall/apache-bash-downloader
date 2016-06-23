@@ -1,0 +1,8 @@
+TODO: pull from dist.apache if too old
+
+TODO: common functions to pull from nexus if binaries are there
+
+TODO: maybe look the way hadoop generates the mds file and use that, but I
+think it requires gpg be installed
+
+TODO: figure out how to remove reminents of a failed download
