@@ -7,7 +7,7 @@ to programmatically download binaries and do the following:
 
 2. Parse the signatures and verify the download, because the md5 file contains multiple entries
 
-The download_* script will download the package named in the script.  Each
+The download_* scripts will download the package named in the script.  Each
 script has a default version, but can override that with an environment
 variable.  For example, running
 
@@ -28,5 +28,12 @@ others in terms of speed.  Some mirrors fail sometimes too.
 
 If you don't see the project you want to download, feel free to create a
 ticket.  Or if you want it faster, feel free to make a pull request.
+
+You will note a Makefile.  This has 2 targets, test and clean.  The test target
+will execute all the scripts, put the artifacts in the test directory, assert
+everything is working and then clean up the downloaded files for the next run
+if everything passes.  You can run the clean target to remove all files in main
+directory not committed in git, including the downloaded tests files if
+something failes.
 
 It really should be easier than this :(  Maybe there is a better way.
