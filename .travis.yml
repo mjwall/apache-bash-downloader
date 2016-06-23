@@ -1,6 +1,4 @@
 os:
   - linux
   - osx
-
-script:
-  - make test
+script: make test
