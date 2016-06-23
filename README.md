@@ -1,6 +1,9 @@
 # Apache Bash Downloader
 
-# Description
+## Travis-CI status
+[![Build Status](https://secure.travis-ci.org/mjwall/apache-bash-downloader.png)](http://travis-ci.org/mjwall/apache-bash-downloader)
+
+## Description
 
 Just a simple scripts to download stuff from Apache.  I couldn't find a utility
 to programmatically download binaries and do the following:
@@ -13,7 +16,7 @@ differently.
 These scripts are designed for any tool that needs to download one of these
 packages.  I am writing this to use in a Dockerfile.
 
-# Usage
+## Usage
 
 The download-\* scripts will download the package named in the script.  Each
 script has a default version, but can override that with an environment
@@ -29,7 +32,7 @@ something like
 All the download-\* scripts source some common functions, defined in common.sh.
 Check out the source for more information about what is going on.
 
-# Details
+## Details
 
 Most of these scripts download from Apache mirrors.  Therefore it is possible the
 version of a package are no longer hosted there.  For example, on 22 June 2016,
@@ -48,7 +51,7 @@ exercise of downloading KEYS for each project to use.
 
 It really should be easier than this :(  Maybe there is a better way.
 
-# Contributing
+## Contributing
 
 If you don't see the project you want to download, feel free to create a
 ticket.  Or if you want it faster, feel free to make a pull request.
