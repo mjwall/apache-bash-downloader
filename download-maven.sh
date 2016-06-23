@@ -19,7 +19,7 @@ get_maven_sha1_from_sig() {
 }
 
 run() {
-  log Downloading and checking "${MAVEN_FILE}"
+  yellow Downloading Maven version "${MAVEN_VERSION}"
   download_file_from_mirror "${MAVEN_FILE}" "${MAVEN_URL_FROM_BASE}"
   download_signature_file "${MAVEN_SHA_FILE}" "${MAVEN_URL_FROM_BASE}"
   local EXPECTED=$(get_maven_sha1_from_sig "${MAVEN_SHA_FILE}")
@@ -27,5 +27,5 @@ run() {
   assert_signature "${EXPECTED}" "${ACTUAL}"
 }
 
-source ./common.sh
+source $(dirname $0)/common.sh
 run

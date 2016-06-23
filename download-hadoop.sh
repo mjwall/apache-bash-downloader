@@ -31,7 +31,7 @@ get_hadoop_sha256_from_sig() {
 }
 
 run() {
-  log Downloading and checking "${HADOOP_FILE}"
+  yellow Downloading Hadoop version "${HADOOP_VERSION}"
   download_file_from_mirror "${HADOOP_FILE}" "${HADOOP_URL_FROM_BASE}"
   download_signature_file "${HADOOP_SHA_FILE}" "${HADOOP_URL_FROM_BASE}"
   local EXPECTED=$(get_hadoop_sha256_from_sig "${HADOOP_SHA_FILE}")
@@ -39,5 +39,5 @@ run() {
   assert_signature "${EXPECTED}" "${ACTUAL}"
 }
 
-source ./common.sh
+source $(dirname $0)/common.sh
 run

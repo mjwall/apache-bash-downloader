@@ -1,8 +1,15 @@
-TODO: pull from dist.apache if too old
-
-TODO: common functions to pull from nexus if binaries are there
+TODO: pull from archive.apache if too old
 
 TODO: maybe look the way hadoop generates the mds file and use that, but I
 think it requires gpg be installed
 
 TODO: figure out how to remove reminents of a failed download
+
+TODO: better version validation
+
+TODO: maybe use gpg
+
+TODO: maybe make a config file with sha1 or md5 and version and only download
+and verify those versions
+
+TODO: make work in local directory

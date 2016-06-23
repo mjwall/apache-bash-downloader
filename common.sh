@@ -32,7 +32,7 @@ download_file_from_mirror() {
   local CURLCMD="curl -s -L ${URL_BASE}${URL_DIRECTORIES}${FILENAME}?as_json=1" 
   local BASE=$(${CURLCMD} | grep preferred | awk '{print $NF}' | sed 's/\"//g')
   local URL="${BASE}${URL_DIRECTORIES}${FILENAME}"
-  _download_file "${URL}" "${FILENAME}"
+  download_file "${URL}" "${FILENAME}"
 }
 
 # STEP 2 
@@ -51,7 +51,7 @@ download_signature_file() {
   # make sure the URL_DIRECTORIES ends in a /
   test "${URL_DIRECTORIES: -1}" != "/" && URL_DIRECTORIES="${URL_DIRECTORIES}/"
 
-  _download_file "${URL_BASE}${URL_DIRECTORIES}${FILENAME}" "${FILENAME}"
+  download_file "${URL_BASE}${URL_DIRECTORIES}${FILENAME}" "${FILENAME}"
 }
 
 # STEP 3 
@@ -151,6 +151,29 @@ is_mac() {
 is_linux() {
   test "$(os)" == "Linux"
 }
+download_file() {
+  local URL=$1
+  local OUTFILE=$2
+  local CURL_ARGS=""
+  if [ "${URL}x" == "x" ] || [ "${OUTFILE}x" == "x" ]; then
+    abort "download_file takes at least arguments [url] [outfile], the third is optional [curl_args]"
+  fi
+  if [ -e ${OUTFILE} ]; then
+    yellow File ${OUTFILE} already downloaded
+  else
+    log Downloading $URL
+    if _is_debug; then
+      light_blue "URL: ${URL}"
+      light_blue "OUTFILE: ${OUTFILE}"
+      CURL_ARGS="${CURL_ARGS} -v"
+    fi
+    if [ "${CURL_ARGS}x" == "x" ]; then
+      curl -L "${URL}" -o "${OUTFILE}" || abort "Failed to download ${OUTFILE}"
+    else
+      curl -L "${URL}" ${CURL_ARGS} -o "${OUTFILE}" || abort "Failed to download ${OUTFILE}"
+    fi
+  fi
+}
 sha256sum_cmd() {
   local CMD=""
   if is_mac; then
@@ -216,25 +239,6 @@ _normal=$(tput sgr0)
 _is_debug() {
   # run with DEBUG=1 ./download-whatever.sh to help troubleshoot
   test "${DEBUG}x" != "x"
-}
-_download_file() {
-  local URL=$1
-  local OUTFILE=$2
-  if [ "${URL}x" == "x" ] || [ "${OUTFILE}x" == "x" ]; then
-    abort "_download_file takes 2 arguments [url] [outfile]"
-  fi
-  if [ -e ${OUTFILE} ]; then
-    yellow File ${OUTFILE} already downloaded
-  else
-    log Downloading $URL
-    if _is_debug; then
-      light_blue "URL: ${URL}"
-      light_blue "OUTFILE: ${OUTFILE}"
-      curl -L "${URL}" -v -o "${OUTFILE}" || abort "Failed to download ${OUTFILE}"
-    else
-      curl -L "${URL}" -o "${OUTFILE}" || abort "Failed to download ${OUTFILE}"
-    fi
-  fi
 }
 _ensure_executables() {
   local EXES=""

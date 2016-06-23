@@ -5,8 +5,6 @@
 # Can change verison like
 # VERSION=3.3.6 ./download-zookeeper.sh
 
-#https://dist.apache.org/repos/dist/release/zookeeper/zookeeper-3.3.6/zookeeper-3.3.6.tar.gz
-
 ZOOKEEPER_VERSION="${VERSION:-3.4.8}" 
 ZOOKEEPER_FILE="zookeeper-${ZOOKEEPER_VERSION}.tar.gz"
 ZOOKEEPER_SHA_FILE="${ZOOKEEPER_FILE}.sha1"
@@ -21,7 +19,7 @@ get_sha1_from_sig() {
 }
 
 run() {
-  log Downloading and checking "${ZOOKEEPER_FILE}"
+  yellow Downloading Zookeeper version "${ZOOKEEPER_VERSION}"
   download_file_from_mirror "${ZOOKEEPER_FILE}" "${ZOOKEEPER_URL_FROM_BASE}"
   download_signature_file "${ZOOKEEPER_SHA_FILE}" "${ZOOKEEPER_URL_FROM_BASE}"
   local EXPECTED=$(get_sha1_from_sig "${ZOOKEEPER_SHA_FILE}")
@@ -29,5 +27,5 @@ run() {
   assert_signature "${EXPECTED}" "${ACTUAL}"
 }
 
-source ./common.sh
+source $(dirname $0)/common.sh
 run
