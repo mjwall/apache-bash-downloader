@@ -15,12 +15,14 @@ run_good_tests() {
     ${SC_DIR}/download-maven.sh &&
     ${SC_DIR}/download-zookeeper.sh &&
     ${SC_DIR}/download-accumulo.sh &&
+    ${SC_DIR}/download-ant.sh &&
     DEBUG=1 ${SC_DIR}/download-maven.sh &&
     VERSION=3.3.6 ${SC_DIR}/download-zookeeper.sh &&
-    DEBUG=1 VERSION=1.7.1 ${SC_DIR}/download-accumulo.sh
+    DEBUG=1 VERSION=1.7.1 ${SC_DIR}/download-accumulo.sh &&
+    VERSION=1.9.6 ${SC_DIR}/download-apache.sh
   RET=$?
   if [ "$RET" -gt 0 ]; then
-    red "Something failed, leaving the files so can investigate" 
+    red "Something failed, leaving the files so can investigate"
     exit 1
   else
     green "All tests passed"
@@ -32,8 +34,9 @@ run_good_tests() {
 run_failure_tests() {
   light_blue Running tests we expect to fail
   # bad version
-  VERSION=3.3.4 ${SC_DIR}/download-zookeeper.sh || 
-    VERSION=1.4.1 ${SC_DIR}/download-accumulo.sh
+  VERSION=3.3.4 ${SC_DIR}/download-zookeeper.sh ||
+    VERSION=1.4.1 ${SC_DIR}/download-accumulo.sh ||
+    VERSION=0.4.1 ${SC_DIR}/download-ant.sh
   RET=$?
   if [ "$RET" -gt 0 ]; then
     green "Expected these to fail, so we are good."

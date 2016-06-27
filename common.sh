@@ -13,7 +13,7 @@
 
 # Typical scripts will
 
-# STEP 1 
+# STEP 1
 # Call download_file_from_mirror, passing in the file name and directories from
 # the root url to the file.  For example:
 # Here is the function.
@@ -29,19 +29,19 @@ download_file_from_mirror() {
   test "${URL_DIRECTORIES: -1}" != "/" && URL_DIRECTORIES="${URL_DIRECTORIES}/"
 
   # use the closer.cgi to pick a mirror
-  local CURLCMD="curl -s -L ${URL_BASE}${URL_DIRECTORIES}${FILENAME}?as_json=1" 
+  local CURLCMD="curl -s -L ${URL_BASE}${URL_DIRECTORIES}${FILENAME}?as_json=1"
   local BASE=$(${CURLCMD} | grep preferred | awk '{print $NF}' | sed 's/\"//g')
   local URL="${BASE}${URL_DIRECTORIES}${FILENAME}"
   download_file "${URL}" "${FILENAME}"
 }
 
-# STEP 2 
+# STEP 2
 # Call download_signature_file, passing in the file name and directories
 # from the root of the dist.apache url.  For example:
 # Here is the function.
 download_signature_file() {
   # only download from dist.apache
-  local URL_BASE="https://dist.apache.org/repos/dist/release/" 
+  local URL_BASE="https://dist.apache.org/repos/dist/release/"
   local FILENAME=$1
   local URL_DIRECTORIES=$2 #part between the url base and the filename
   if [ "${FILENAME}x" == "x" ] || [ "${URL_DIRECTORIES}x" == "x" ]; then
@@ -54,7 +54,7 @@ download_signature_file() {
   download_file "${URL_BASE}${URL_DIRECTORIES}${FILENAME}" "${FILENAME}"
 }
 
-# STEP 3 
+# STEP 3
 # Implement a function to read the appropriate checksum from the signature file.
 # This is left to each script, because signature file format varies depending
 # on how the developers of the project produce the signature files. Store this
@@ -205,7 +205,7 @@ md5sum_cmd() {
   else
     abort No md5sum comman found on $(os)
   fi
-  echo "${CMD}" 
+  echo "${CMD}"
 }
 strip_spaces_and_lowercase() {
   # note, no check to ensure you pass in a string
