@@ -230,12 +230,13 @@ _script_dir() {
     fi
     echo "${SCRIPT_DIR}"
 }
-_blue=$(tput setaf 4)
-_green=$(tput setaf 2)
-_red=$(tput setaf 1)
-_yellow=$(tput setaf 3)
-_light_blue=$(tput setaf 6)
-_normal=$(tput sgr0)
+# only color if TERM available
+_blue=$(tty -s && tput setaf 4)
+_green=$(tty -s && tput setaf 2)
+_red=$(tty -s && tput setaf 1)
+_yellow=$(tty -s && tput setaf 3)
+_light_blue=$(tty -s && tput setaf 6)
+_normal=$(tty -s && tput sgr0)
 _is_debug() {
   # run with DEBUG=1 ./download-whatever.sh to help troubleshoot
   test "${DEBUG}x" != "x"
