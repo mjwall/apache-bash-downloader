@@ -15,7 +15,7 @@
 # requested version, someplace like
 # http://archive.apache.org/dist/hadoop/common/hadoop-${hadoop.version}/hadoop-${hadoop.version}.tar.gz
 
-HADOOP_VERSION="${VERSION:-2.6.4}" 
+HADOOP_VERSION="${VERSION:-2.6.5}" 
 HADOOP_FILE="hadoop-${HADOOP_VERSION}.tar.gz"
 HADOOP_SHA_FILE="${HADOOP_FILE}.mds"
 HADOOP_URL_FROM_BASE="hadoop/common/hadoop-${HADOOP_VERSION}"
@@ -27,13 +27,13 @@ get_hadoop_sha256_from_sig() {
   fi
   # The hadoop signature file has multiple signatures and each signature can be
   # 1 or more lines.  So do this
-  # get rid of lines pointing the tar.gz files (grep -v hadoop-)
+  # get rid of text pointing the tar.gz files
   # get the SHA256 line plus 1 more line in case it goes over
   # get rid of SHA384 incase the SHA256 was one line
   # get rid of newlines
   # remove 'SHA256 = '
   # then remove spaces to get the SHA256 signatuver
-  echo $(cat hadoop-3.1.2.tar.gz.mds | grep -v hadoop- | grep -A1 SHA256 | grep -v SHA384 | tr -d '\n' | sed 's/SHA256 = //;s/ //g')
+  echo $(cat ${SHAFILE} | sed 's/^.*hadoop.*://' | grep -A1 SHA256 | grep -v SHA384 | tr -d '\n' | sed 's/.*SHA256 = //;s/ //g')
 }
 
 run() {
