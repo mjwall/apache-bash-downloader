@@ -5,7 +5,9 @@
 # Can change verison like
 # VERSION=3.3.6 ./download-zookeeper.sh
 
-ZOOKEEPER_VERSION="${VERSION:-3.4.8}" 
+# As of 18 Feb 2019, 3.4.10 appears to be the latest in the main repos
+
+ZOOKEEPER_VERSION="${VERSION:-3.4.10}" 
 ZOOKEEPER_FILE="zookeeper-${ZOOKEEPER_VERSION}.tar.gz"
 ZOOKEEPER_SHA_FILE="${ZOOKEEPER_FILE}.sha1"
 ZOOKEEPER_URL_FROM_BASE="zookeeper/zookeeper-${ZOOKEEPER_VERSION}/"

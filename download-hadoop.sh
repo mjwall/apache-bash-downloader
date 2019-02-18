@@ -15,6 +15,8 @@
 # requested version, someplace like
 # http://archive.apache.org/dist/hadoop/common/hadoop-${hadoop.version}/hadoop-${hadoop.version}.tar.gz
 
+# Note3, as of 18 Feb 2019 Hadoop 2.6.5 appears to be the latest in the mirrors
+
 HADOOP_VERSION="${VERSION:-2.6.5}" 
 HADOOP_FILE="hadoop-${HADOOP_VERSION}.tar.gz"
 HADOOP_SHA_FILE="${HADOOP_FILE}.mds"

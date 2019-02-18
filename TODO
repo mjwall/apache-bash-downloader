@@ -13,3 +13,5 @@ TODO: maybe make a config file with sha1 or md5 and version and only download
 and verify those versions
 
 TODO: make work in local directory
+
+TODO: figure out how to get error codes from downloads

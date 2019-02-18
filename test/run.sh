@@ -17,7 +17,7 @@ run_good_tests() {
     ${SC_DIR}/download-accumulo.sh &&
     ${SC_DIR}/download-ant.sh &&
     DEBUG=1 ${SC_DIR}/download-maven.sh &&
-    VERSION=3.3.6 ${SC_DIR}/download-zookeeper.sh &&
+    VERSION=3.4.13 ${SC_DIR}/download-zookeeper.sh &&
     DEBUG=1 VERSION=1.7.1 ${SC_DIR}/download-accumulo.sh &&
     VERSION=1.9.6 ${SC_DIR}/download-ant.sh
   RET=$?

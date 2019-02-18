@@ -6,7 +6,9 @@
 #
 # VERSION=1.8.1 ./download-ant.sh
 
-ANT_VERSION="${VERSION:-1.9.7}"
+# As of 19 Feb, 1.9.13 is the oldest in the mirrors
+
+ANT_VERSION="${VERSION:-1.9.13}"
 ANT_FILE="apache-ant-${ANT_VERSION}-bin.tar.gz"
 ANT_SHA_FILE="${ANT_FILE}.sha1"
 ANT_URL_FROM_BASE="ant/binaries/"
